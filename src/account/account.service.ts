@@ -9,7 +9,7 @@ export class AccountService {
   constructor(private prisma: PrismaService) {}
 
   async getAllAccounts() {
-    return this.prisma.account.findMany(
+    return this.prisma.account.findMany({include:{staff: true}}
     );
   }
 
@@ -33,20 +33,11 @@ export class AccountService {
   }
 
   async createAccount(data: AccountDto) {
-    const account = await this.prisma.account.findUnique({where:{email: data.email}})
-    if(account){
-      throw new BadRequestException (`Account with email: ${data.email} existed`)
-    }
-    const staff = await this.prisma.staff.findUnique({where: {id: data.staffId}})
-    if(!staff){
-      throw new BadRequestException (`Staff with id: ${data.staffId} does not exist or has been removed`)
-    }
-    console.log("data",data)
+
     return await this.prisma.account.create({
       data: {
         email: data.email,
         password: data.password,
-        staffId: data.staffId
       },
     });
   }

@@ -15,7 +15,7 @@ model Account {
   password    String
 
   staff   Staff   @relation(fields: [email], references: [email], onDelete: Cascade)
-  staffId String  @unique @db.ObjectId
+
 }
 
 model Staff {

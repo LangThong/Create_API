@@ -77,7 +77,7 @@ export class StaffService {
       data: {
         email: data.email,
         password: hashedPassword,
-        staffId: staff.id, 
+
       },
     });
 
