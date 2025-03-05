@@ -11,6 +11,8 @@ import {
   } from '@nestjs/common';
   import { AccountService } from './account.service';
   import { AccountDto } from './dto/account.dto';
+import { CreateStaffDto } from 'src/staff/dto/create-staff.dto';
+
   
   @Controller('api/account')
   export class AccountController {
@@ -30,19 +32,19 @@ import {
   
     // Tạo tài khoản mới
     @Post()
-    async createAccount(@Body() accountDto: AccountDto) {
-      return this.accountService.createAccount(accountDto);
+    async createAccount(@Body() createAccountDto: { account: AccountDto; staff: CreateStaffDto }) {
+      console.log('Received DTO:', createAccountDto);
+      return this.accountService.createAccount(createAccountDto.account, createAccountDto.staff);
     }
   
     // Cập nhật tài khoản theo ID (có thể cập nhật một hoặc nhiều trường)
-    // @Patch(':accountId')
-    // async updateAccount(
-    //   @Param('accountId') accountId: string,
-    //   @Body() updateData: Partial<AccountDto>,
-    // ) {
-    //   return this.accountService.updateAccount(accountId, updateData);
-    // }
-  
+    @Patch(':accountId')
+    async updateAccount(
+      @Param('accountId') accountId: string,
+      @Body() updateData: Partial<AccountDto>,
+    ) {
+      return this.accountService.updateAccount(accountId, updateData);
+    }
     // Xóa tài khoản theo ID
     @Delete(':accountId')
     async deleteAccount(@Param('accountId') accountId: string) {

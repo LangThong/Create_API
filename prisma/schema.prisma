@@ -11,24 +11,31 @@ model Account {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   createdDate DateTime @default(now())
   updatedDate DateTime @updatedAt
-  email       String   @unique
-  password    String
 
-  staff   Staff   @relation(fields: [email], references: [email], onDelete: Cascade)
+  email      String @unique
+  password   String
+  firstName  String
+  lastName   String
+  middleName String?
 
+  role       String @default("user")
+
+  staff Staff?
+
+  @@map("accounts")
 }
 
 model Staff {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   createdDate DateTime @default(now())
   updatedDate DateTime @updatedAt
-  firstName   String
-  lastName    String
-  middleName  String?
-  email       String   @unique
-  avatar      String?
-  location    String?
-  birthday    DateTime?
 
-  account Account?
+  avatar   String?
+  location String?
+  birthday DateTime?
+
+  account   Account @relation(fields: [accountId], references: [id])
+  accountId String  @unique @db.ObjectId
+
+  @@map("staffs")
 }
